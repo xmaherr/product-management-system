@@ -1,11 +1,9 @@
-package entity;
+package com.app.entity;
 
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.app.model.ProductModel;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -15,7 +13,8 @@ import javax.persistence.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+@ToString
+public class ProductEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +24,9 @@ public class Product {
     @Column(name = "name")
     String name;
 
-    @Column(name = "price")
-    double price;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "details_id", referencedColumnName = "productId")
+    ProductDetails details;
 
-    @Column(name = "description")
-    String description;
+
 }

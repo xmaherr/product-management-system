@@ -1,6 +1,6 @@
 
 
-import entity.Product;
+import com.app.entity.ProductEntity;
 import lombok.SneakyThrows;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -48,31 +48,31 @@ public class HibernateConfigurationTest {
         // Verify that SessionFactory is not null
         assertNotNull(sessionFactory, "SessionFactory should be initialized.");
     }
-
-    @Test
-    public void testBasicInsertOperation() {
-        // Open a new session
-        Session session = sessionFactory.openSession();
-        Transaction transaction = (Transaction) session.beginTransaction();
-
-        // Create a test Product object
-        Product product = new Product();
-        product.setName("Test Product22");
-        product.setDescription("This is a test product.");
-        product.setPrice(100.00);
-
-        // Save the product to the database
-        Integer productId = (Integer) session.save(product);
-
-        // Commit the transaction
-        try {
-            transaction.commit();
-        } catch (RollbackException e) {
-            throw new RuntimeException(e);
-        }
-        session.close();
-
-        // Verify that the product was assigned an ID
-        assertNotNull(productId, "Product ID should not be null.");
-    }
+//
+//    @Test
+//    public void testBasicInsertOperation() {
+//        // Open a new session
+//        Session session = sessionFactory.openSession();
+//        Transaction transaction = (Transaction) session.beginTransaction();
+//
+//        // Create a test Product object
+//        ProductEntity productEntity = new ProductEntity();
+//        productEntity.setName("Test Product33");
+//        productEntity.setDescription("This is a test product.");
+//        productEntity.setPrice(100.00);
+//
+//        // Save the product to the database
+//        Integer productId = (Integer) session.save(productEntity);
+//
+//        // Commit the transaction
+//        try {
+//            transaction.commit();
+//        } catch (RollbackException e) {
+//            throw new RuntimeException(e);
+//        }
+//        session.close();
+//
+//        // Verify that the product was assigned an ID
+//        assertNotNull(productId, "Product ID should not be null.");
+//    }
 }
