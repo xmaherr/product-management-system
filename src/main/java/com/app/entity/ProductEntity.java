@@ -24,9 +24,14 @@ public class ProductEntity {
     @Column(name = "name")
     String name;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL ,fetch = FetchType.LAZY)
     @JoinColumn(name = "details_id", referencedColumnName = "productId")
     ProductDetails details;
+
+
+    public int getDetailsId() {
+        return details != null ? details.getProductId() : 12;  // Access foreign key directly
+    }
 
 
 }

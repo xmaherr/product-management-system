@@ -1,5 +1,8 @@
 
 
+import com.app.dao.ProductDao;
+import com.app.dao.ProductDaoImpl;
+import com.app.entity.ProductDetails;
 import com.app.entity.ProductEntity;
 import lombok.SneakyThrows;
 import org.hibernate.Session;
@@ -75,4 +78,11 @@ public class HibernateConfigurationTest {
 //        // Verify that the product was assigned an ID
 //        assertNotNull(productId, "Product ID should not be null.");
 //    }
+
+    @Test
+    public void getPrductDetailsTest() {
+        ProductDao productDao = new ProductDaoImpl();
+        ProductDetails productDetails= productDao.getProductDetailsById(2);
+
+    }
 }

@@ -1,5 +1,6 @@
 package com.app.dao;
 
+import com.app.entity.ProductDetails;
 import com.app.entity.ProductEntity;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +10,5 @@ import java.util.List;
 public interface ProductDao {
     void addProduct(ProductEntity productEntity);
     List<ProductEntity> getProducts();
+    ProductDetails getProductDetailsById(int productDetailsID);
 }

@@ -1,6 +1,7 @@
 package com.app.service;
 
 import com.app.dao.ProductDao;
+import com.app.entity.ProductDetails;
 import com.app.entity.ProductEntity;
 import com.app.model.ProductModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,5 +23,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductEntity> getAllProducts() {
         return productDao.getProducts();
+    }
+
+    @Override
+    public ProductDetails getProductDetailsById(int productDetailsID) {
+        return this.productDao.getProductDetailsById(productDetailsID);
     }
 }
