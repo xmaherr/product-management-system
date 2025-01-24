@@ -1,5 +1,6 @@
 package com.app.entity;
 
+import com.app.model.ProductDetailsModel;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,22 +17,19 @@ public class ProductDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Access(AccessType.PROPERTY)
-    int productId;
+    private int productId;
+
     @Column(name = "manufacturer")
-    String manufacturer;
+    private String manufacturer;
 
     @Column(name = "price")
-    double price;
+    private double price;
 
     @Column(name = "available")
-    boolean available;
+    private boolean available;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "expiry_date")
-    @Temporal(TemporalType.DATE)  // Stores only the date (e.g., 2025-01-01)
     private Date expiryDate;
-
-    @OneToOne(mappedBy = "details",fetch = FetchType.LAZY)
-    ProductEntity productEntity;
 
 }

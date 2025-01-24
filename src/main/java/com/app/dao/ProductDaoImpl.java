@@ -1,80 +1,79 @@
 package com.app.dao;
 
-
-import com.app.entity.ProductDetails;
 import com.app.entity.ProductEntity;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import javax.persistence.RollbackException;
-import java.lang.instrument.Instrumentation;
 import java.util.List;
 
 @Repository
 public class ProductDaoImpl implements ProductDao {
-    private static volatile Instrumentation globalInstrumentation;
-    
+
+    @Autowired
+    private SessionFactory sessionFactory;
+
+    // Default transaction propagation is REQUIRED, which ensures that the transaction is handled correctly
     @Override
-    public void addProduct(ProductEntity productEntity) {
-        ApplicationContext applicationContext =new ClassPathXmlApplicationContext("appContext.xml");
-        SessionFactory sessionFactory = (SessionFactory) applicationContext.getBean("sessionFactory");
-        Session session = sessionFactory.openSession();
-
-        Transaction transaction = session.beginTransaction();
-        session.save(productEntity);
-
-        try {
-            transaction.commit();
-        } catch (RollbackException e) {
-            throw new RuntimeException(e);
-        }
-
-        session.close();
-    }
-
-    @Override
+    @Transactional(readOnly = true)  // Marking it as read-only for better optimization
     public List<ProductEntity> getProducts() {
-        ApplicationContext applicationContext =new ClassPathXmlApplicationContext("appContext.xml");
-        SessionFactory sessionFactory = (SessionFactory) applicationContext.getBean("sessionFactory");
-        Session session = sessionFactory.openSession();
-
-        Transaction transaction = session.beginTransaction();
-        Query query= session.createQuery("from ProductEntity");
-
-        List<ProductEntity> products =query.getResultList();
-
-        for (ProductEntity product : products) {
-            Hibernate.initialize(product.getDetailsId()); // or getDetailsId(), if it's just the ID
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from ProductEntity", ProductEntity.class).list();
         }
-
-        try {
-            transaction.commit();
-        } catch (RollbackException e) {
-            throw new RuntimeException(e);
-        }
-
-
-        session.close();
-
-        return products;
     }
 
     @Override
-    public ProductDetails getProductDetailsById(int productDetailsID) {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("appContext.xml");
-        SessionFactory sessionFactory = (SessionFactory) applicationContext.getBean("sessionFactory");
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-        ProductDetails productDetails =  session.get(ProductDetails.class, productDetailsID);
+    @Transactional(readOnly = true) // Marked as read-only since it's a read operation
+    public ProductEntity getProductById(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.get(ProductEntity.class, id);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
 
-        return productDetails;
+        return null;
     }
 
+    @Override
+    @Transactional(readOnly = true) // Again, this is a read-only operation
+    public ProductEntity getProductWithDetailsById(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            ProductEntity productEntity = session.get(ProductEntity.class, id);
+            if (productEntity != null) {
+                Hibernate.initialize(productEntity.getDetails());
+            }
+            return productEntity;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    @Transactional  // This method updates or saves, so we need a regular transaction
+    public void saveOrUpdateProduct(ProductEntity product) {
+        try (Session session = sessionFactory.openSession()) {
+            session.saveOrUpdate(product);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    @Transactional  // This method involves a delete operation, so a regular transaction is needed
+    public void deleteProduct(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            ProductEntity product = session.get(ProductEntity.class, id);
+            if (product != null) {
+                session.delete(product);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

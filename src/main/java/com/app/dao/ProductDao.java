@@ -8,7 +8,12 @@ import java.util.List;
 
 @Repository
 public interface ProductDao {
-    void addProduct(ProductEntity productEntity);
+
     List<ProductEntity> getProducts();
-    ProductDetails getProductDetailsById(int productDetailsID);
+
+    ProductEntity getProductById(int id);
+    ProductEntity getProductWithDetailsById(int id);
+    void saveOrUpdateProduct(ProductEntity product);
+
+    void deleteProduct(int id);
 }

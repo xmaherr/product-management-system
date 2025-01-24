@@ -1,15 +1,19 @@
 package com.app.service;
 
-import com.app.entity.ProductDetails;
-import com.app.entity.ProductEntity;
+import com.app.model.ProductDetailsModel;
 import com.app.model.ProductModel;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-@Service
 public interface ProductService {
-    void addProduct(ProductEntity product);
-    List<ProductEntity> getAllProducts();
-   ProductDetails getProductDetailsById(int productDetailsID);
+    List<ProductModel> getAllProducts();
+
+    ProductModel getProductDetailsById(int id);
+
+    ProductModel getProductById(int id); // Added this missing method
+
+    void saveProduct(ProductModel product);
+
+    void updateProduct(int id, ProductModel productModel, ProductDetailsModel detailsModel);
+
+    void deleteProduct(int id);
 }

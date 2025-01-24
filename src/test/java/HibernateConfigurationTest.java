@@ -2,12 +2,9 @@
 
 import com.app.dao.ProductDao;
 import com.app.dao.ProductDaoImpl;
-import com.app.entity.ProductDetails;
 import com.app.entity.ProductEntity;
 import lombok.SneakyThrows;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,8 +12,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 //import javax.persistence.RollbackException;
-import javax.persistence.RollbackException;
 
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -80,9 +78,11 @@ public class HibernateConfigurationTest {
 //    }
 
     @Test
-    public void getPrductDetailsTest() {
+    public void getProductDetailsTest() {
         ProductDao productDao = new ProductDaoImpl();
-        ProductDetails productDetails= productDao.getProductDetailsById(2);
+     ProductEntity productEntity= productDao.getProductWithDetailsById(2);
+        System.out.println(productEntity.toString());
+        System.out.println(productEntity.getDetails());
 
     }
 }

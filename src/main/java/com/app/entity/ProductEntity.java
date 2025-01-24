@@ -2,7 +2,6 @@ package com.app.entity;
 
 
 
-import com.app.model.ProductModel;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+//@ToString
 public class ProductEntity {
 
     @Id
@@ -29,9 +28,8 @@ public class ProductEntity {
     ProductDetails details;
 
 
-    public int getDetailsId() {
-        return details != null ? details.getProductId() : 12;  // Access foreign key directly
+    @Override
+    public String toString() {
+        return "id"+id+"name"+name;
     }
-
-
 }
