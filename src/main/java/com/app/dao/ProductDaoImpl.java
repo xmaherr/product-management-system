@@ -6,7 +6,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.List;
 
@@ -15,6 +18,8 @@ public class ProductDaoImpl implements ProductDao {
 
     @Autowired
     private SessionFactory sessionFactory;
+    @Autowired
+    private PlatformTransactionManager transactionManager;
 
     // Default transaction propagation is REQUIRED, which ensures that the transaction is handled correctly
     @Override
@@ -54,25 +59,28 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    @Transactional  // This method updates or saves, so we need a regular transaction
     public void saveOrUpdateProduct(ProductEntity product) {
-        try (Session session = sessionFactory.openSession()) {
-            session.saveOrUpdate(product);
+        TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+        try {
+            sessionFactory.getCurrentSession().saveOrUpdate(product);
+            transactionManager.commit(status); // Commit the transaction
         } catch (Exception e) {
+            transactionManager.rollback(status); // Rollback on error
             e.printStackTrace();
         }
-
     }
 
     @Override
-    @Transactional  // This method involves a delete operation, so a regular transaction is needed
     public void deleteProduct(int id) {
-        try (Session session = sessionFactory.openSession()) {
-            ProductEntity product = session.get(ProductEntity.class, id);
+        TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+        try {
+            ProductEntity product = sessionFactory.getCurrentSession().get(ProductEntity.class, id);
             if (product != null) {
-                session.delete(product);
+                sessionFactory.getCurrentSession().delete(product);
+                transactionManager.commit(status); // Commit the transaction
             }
         } catch (Exception e) {
+            transactionManager.rollback(status); // Rollback on error
             e.printStackTrace();
         }
     }
