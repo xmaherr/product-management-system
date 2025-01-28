@@ -2,7 +2,9 @@ package com.app.service;
 
 import com.app.model.ProductDetailsModel;
 import com.app.model.ProductModel;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 public interface ProductService {
     List<ProductModel> getAllProducts();
@@ -13,7 +15,8 @@ public interface ProductService {
 
     void saveProduct(ProductModel product);
 
-    void updateProduct(int id, ProductModel productModel, ProductDetailsModel detailsModel);
+    void updateProduct(ProductModel productModel, ProductDetailsModel detailsModel ) throws IOException;
 
     void deleteProduct(int id);
+    void deleteProductImage(int id);
 }

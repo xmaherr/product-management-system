@@ -32,4 +32,8 @@ public class ProductDetails {
     @Column(name = "expiry_date")
     private Date expiryDate;
 
+    @Lob
+    @Column(name = "image")
+    private byte[] image;
+
 }

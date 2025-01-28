@@ -18,8 +18,8 @@ import javax.validation.constraints.*;
 public class ProductModel {
     int id;
 
-    @NotBlank(message = "required!!")
-    @Size(min = 4 ,message = "the name must be at lest 4 characters")
+//    @NotBlank(message = "required!!")
+//    @Size(min = 4 ,message = "the name must be at lest 4 characters")
     String name;
 
     @Valid

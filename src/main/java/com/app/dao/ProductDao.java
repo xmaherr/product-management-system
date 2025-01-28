@@ -14,6 +14,7 @@ public interface ProductDao {
     ProductEntity getProductById(int id);
     ProductEntity getProductWithDetailsById(int id);
     void saveOrUpdateProduct(ProductEntity product);
-
     void deleteProduct(int id);
+    void deleteProductImage(int id);
+    ProductDetails getProductDetails(int id);
 }

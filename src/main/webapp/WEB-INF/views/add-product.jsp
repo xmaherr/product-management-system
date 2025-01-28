@@ -12,7 +12,7 @@
             <div class="card shadow">
                 <div class="card-body">
                     <h2 class="text-center text-primary">Add New Product</h2>
-                    <form:form method="post" modelAttribute="product" action="add-product">
+                    <form:form method="post" modelAttribute="product" action="add-product" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="name" class="form-label">Product Name</label>
                             <form:input path="name" id="name" type="text" cssClass="form-control" placeholder="Enter product name" />
@@ -37,6 +37,10 @@
                             <label for="expiryDate" class="form-label">Expiry Date</label>
                             <form:input path="details.expiryDate" id="expiryDate" type="date" cssClass="form-control" />
                             <form:errors path="details.expiryDate" cssClass="text-danger" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="formFile" class="form-label">Product Image</label>
+                            <form:input name="image" class="form-control" type="file" id="formFile" path="details.imageFile"/>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Add Product</button>
                     </form:form>

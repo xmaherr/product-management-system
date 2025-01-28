@@ -80,7 +80,7 @@ public class HibernateConfigurationTest {
     @Test
     public void getProductDetailsTest() {
         ProductDao productDao = new ProductDaoImpl();
-     ProductEntity productEntity= productDao.getProductWithDetailsById(2);
+     ProductEntity productEntity= productDao.getProductWithDetailsById(12);
         System.out.println(productEntity.toString());
         System.out.println(productEntity.getDetails());
 

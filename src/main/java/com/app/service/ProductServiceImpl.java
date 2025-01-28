@@ -5,9 +5,13 @@ import com.app.entity.ProductDetails;
 import com.app.entity.ProductEntity;
 import com.app.model.ProductDetailsModel;
 import com.app.model.ProductModel;
+import com.app.util.UtilFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 @Service
@@ -31,8 +35,6 @@ public class ProductServiceImpl implements ProductService {
             productModel.setDetails(new ProductDetailsModel(product.getDetails()));
             return productModel;
         }
-        System.out.println(product.toString());
-        System.out.println(product.getDetails().toString());
         return null;
     }
 
@@ -54,6 +56,16 @@ public class ProductServiceImpl implements ProductService {
             productDetails.setManufacturer(product.getDetails().getManufacturerModel());
             productDetails.setExpiryDate(product.getDetails().getExpiryDate());
 
+            if (thereIsImage(product.getDetails().getImageFile())) {
+                try {
+                    productDetails.setImage(product.getDetails().getImageFile().getBytes());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                productDetails.setImage(null);
+            }
+
             productEntity.setDetails(productDetails);
 
             this.productDao.saveOrUpdateProduct(productEntity);
@@ -61,8 +73,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(int id, ProductModel productModel, ProductDetailsModel detailsModel) {
-        ProductEntity product = productDao.getProductWithDetailsById(id);
+    public void updateProduct(ProductModel productModel, ProductDetailsModel detailsModel) throws IOException {
+        ProductEntity product = productDao.getProductWithDetailsById(productModel.getId());
         if (product != null) {
             product.setName(productModel.getName());
 
@@ -72,9 +84,11 @@ public class ProductServiceImpl implements ProductService {
                 details.setPrice(detailsModel.getPrice());
                 details.setAvailable(detailsModel.isAvailable());
                 details.setExpiryDate(detailsModel.getExpiryDate());
+                //set image
+                if (thereIsImage(detailsModel.getImageFile())) {
+                    details.setImage(detailsModel.getImageFile().getBytes());
+                }
             }
-            System.out.println(product.toString());
-            System.out.println(product.getDetails().toString());
             productDao.saveOrUpdateProduct(product);
         }
     }
@@ -83,4 +97,16 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(int id) {
         productDao.deleteProduct(id);
     }
+
+    @Override
+    public void deleteProductImage(int id) {
+        this.productDao.deleteProductImage(id);
+    }
+
+    public boolean thereIsImage(MultipartFile file) {
+
+        return file!=null && file.getSize()>0;
+    }
+
+
 }

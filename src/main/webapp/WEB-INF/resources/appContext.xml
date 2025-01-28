@@ -49,4 +49,8 @@
     <tx:annotation-driven transaction-manager="transactionManager"/>
 <!--    <mvc:annotation-driven validator="myBeansValidator"/>-->
     <context:component-scan base-package="com.app" />
+
+<!--    to add image-->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
 </beans>

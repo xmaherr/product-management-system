@@ -4,16 +4,39 @@
 <head>
     <title>Product Details</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .product-image {
+            width: 150px; /* Adjust the width as needed */
+            height: auto; /* Maintain aspect ratio */
+            border-radius: 10px; /* Optional: Rounded corners */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add shadow */
+        }
+    </style>
 </head>
 <body class="bg-light">
 <div class="container mt-2">
     <div class="row justify-content-center">
-        <div class="col-md-8"> <!-- This will set the column width to 8 out of 12 (about 2/3 of the page) -->
-            <div class="card shadow">
+        <div class="col-md-8">
+            <div class="card shadow position-relative">
                 <div class="card-body">
+                    <!-- Product Image -->
+
                     <h2 class="text-primary text-center">Product Details</h2>
                     <c:if test="${not empty product}">
                         <table class="table table-bordered">
+                            <tr>
+                                <c:if test="${not empty product.details.image}">
+                                    <td colspan="2" style='text-align:center; vertical-align:middle'>
+                                        <img src="data:image/jpeg;base64,${image}" alt="Product Image" class="product-image">
+                                    </td>
+                                </c:if>
+                                <c:if test="${empty product.details.image}">
+                                    <td colspan="2">
+                                       NO IMAGE FOR THIS PRODUCT!
+                                    </td>
+                                </c:if>
+
+                            </tr>
                             <tr>
                                 <th>ID</th>
                                 <td>${product.id}</td>
